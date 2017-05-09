@@ -5,7 +5,7 @@
 
 %% Initilialization
 close all; clc;
-
+ %john 
 %% Import Data
 [otu_num,otu_txt,otu_raw] = xlsread('OTU.xlsx');
 [tax_num,tax_txt,tax_raw] = xlsread('taxatable.xlsx');
