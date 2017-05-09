@@ -14,7 +14,7 @@ close all; clc;
 
 %% Time Series Data
 collection_days = (time_num(:,1)); % day of which sample was collected
-sampleID = time_raw(2:end-1,1);
+sampleID = time_raw(2:end-1,1:2);
 donor = time_raw(2:end-1,4); % donor strings
 nutrition_calcium = (time_num(:,4));
 nutrition_calorie = (time_num(:,5));
@@ -26,6 +26,8 @@ nutrition_protein = (time_num(:,10));
 nutrition_satfat = (time_num(:,11));
 nutrition_sodium = (time_num(:,12));
 nutrition_sugar = (time_num(:,13));
+
+nutrition_intake = {['calcium'] ['calorie'] ['carb'] ['cholesterol'] ['fat'] ['fiber'] ['protein'] ['satfat'] ['sodium'] ['sugar']};
 
 %% Donor A Sample ID
 sample_days = 627;
@@ -40,9 +42,8 @@ end
 
 donorA_sampleID = {};
 for i = 1:length(donorA_loc)
-    donorA_sampleID(i) = sampleID(i);
+    donorA_sampleID(i,:) = sampleID(i,:);
 end
-donorA_sampleID = donorA_sampleID';
 %% Donor A Stool
 % Stool
 stool_days = 341;
@@ -277,60 +278,95 @@ end
 figure()
 subplot(2,5,1)
 plot(donorA_saliva_calcium(:,1),donorA_saliva_calcium(:,2))
+axis([ min(donorA_saliva_calcium(:,1)) max(donorA_saliva_calcium(:,1)) min(donorA_saliva_calcium(:,2)) max(donorA_saliva_calcium(:,2))])
 title('Donor A Saliva Calcium')
 xlabel('Collection Days')
 ylabel('Calcium (s)')
 
 subplot(2,5,2)
 plot(donorA_saliva_calorie(:,1),donorA_saliva_calorie(:,2))
+axis([ min(donorA_saliva_calorie(:,1)) max(donorA_saliva_calorie(:,1)) min(donorA_saliva_calorie(:,2)) max(donorA_saliva_calorie(:,2))])
 title('Donor A Saliva Calorie')
 xlabel('Collection Days')
 ylabel('Calorie (s)')
 
 subplot(2,5,3)
 plot(donorA_saliva_carb(:,1),donorA_saliva_carb(:,2))
+axis([ min(donorA_saliva_carb(:,1)) max(donorA_saliva_carb(:,1)) min(donorA_saliva_carb(:,2)) max(donorA_saliva_carb(:,2))])
 title('Donor A Saliva Carb')
 xlabel('Collection Days')
 ylabel('Carb (s)')
 
 subplot(2,5,4)
 plot(donorA_saliva_cholesterol(:,1),donorA_saliva_cholesterol(:,2))
+axis([ min(donorA_saliva_cholesterol(:,1)) max(donorA_saliva_cholesterol(:,1)) min(donorA_saliva_cholesterol(:,2)) max(donorA_saliva_cholesterol(:,2))])
 title('Donor A Saliva Cholesterol')
 xlabel('Collection Days')
 ylabel('Cholesterol (s)')
 
 subplot(2,5,5)
 plot(donorA_saliva_fat(:,1),donorA_saliva_fat(:,2))
+axis([ min(donorA_saliva_fat(:,1)) max(donorA_saliva_fat(:,1)) min(donorA_saliva_fat(:,2)) max(donorA_saliva_fat(:,2))])
 title('Donor A Saliva Fat')
 xlabel('Collection Days')
 ylabel('Fat (s)')
 
 subplot(2,5,6)
 plot(donorA_saliva_fiber(:,1),donorA_saliva_fiber(:,2))
+axis([ min(donorA_saliva_fiber(:,1)) max(donorA_saliva_fiber(:,1)) min(donorA_saliva_fiber(:,2)) max(donorA_saliva_fiber(:,2))])
 title('Donor A Saliva Fiber')
 xlabel('Collection Days')
 ylabel('Fiber (s)')
 
 subplot(2,5,7)
 plot(donorA_saliva_protein(:,1),donorA_saliva_protein(:,2))
+axis([ min(donorA_saliva_protein(:,1)) max(donorA_saliva_protein(:,1)) min(donorA_saliva_protein(:,2)) max(donorA_saliva_protein(:,2))])
 title('Donor A Saliva Protein')
 xlabel('Collection Days')
 ylabel('Protein (s)')
 
 subplot(2,5,8)
 plot(donorA_saliva_satfat(:,1),donorA_saliva_satfat(:,2))
+axis([ min(donorA_saliva_satfat(:,1)) max(donorA_saliva_satfat(:,1)) min(donorA_saliva_satfat(:,2)) max(donorA_saliva_satfat(:,2))])
 title('Donor A Saliva Saturated Fat')
 xlabel('Collection Days')
 ylabel('Satureated Fat (s)')
 
 subplot(2,5,9)
 plot(donorA_saliva_sodium(:,1),donorA_saliva_sodium(:,2))
+axis([ min(donorA_saliva_sodium(:,1)) max(donorA_saliva_sodium(:,1)) min(donorA_saliva_sodium(:,2)) max(donorA_saliva_sodium(:,2))])
 title('Donor A Saliva Sodium')
 xlabel('Collection Days')
 ylabel('Sodium (s)')
 
 subplot(2,5,10)
 plot(donorA_saliva_sugar(:,1),donorA_saliva_sugar(:,2))
+axis([ min(donorA_saliva_sugar(:,1)) max(donorA_saliva_sugar(:,1)) min(donorA_saliva_sugar(:,2)) max(donorA_saliva_sugar(:,2))])
 title('Donor A Saliva Sugar')
 xlabel('Collection Days')
 ylabel('Sugar (s)')
+
+
+%% Bacteria Abundance
+% Sample ID Matches
+otu_c = 1127;
+otu_r = 736;
+bacteria1 = [];
+loc = 1;
+otu_sample_loc = zeros(length(donorA_sampleID),1);
+% cell2mat(strfind(otu_raw(2,1), donorA_sampleID(2)))
+
+% find location of the sample ID in the OTU file
+for i = 2:otu_r
+    for j = 1:length(donorA_sampleID)
+       if(not(isempty(cell2mat(strfind(otu_raw(i,1), donorA_sampleID(j,1))))))
+        otu_sample_loc(loc) = i;
+        loc = loc+1;
+       end 
+    end
+end
+
+bac1_occurance = zeros(length(otu_sample_loc),1);
+for i = 1:length(otu_sample_loc)
+    bac1_occurance(i) = 0;
+end

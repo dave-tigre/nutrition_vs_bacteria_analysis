@@ -14,7 +14,7 @@ close all; clc;
 
 %% Time Series Data
 collection_days = (time_num(:,1)); % day of which sample was collected
-sampleID = time_raw(2:end-1,1);
+sampleID = time_raw(2:end-1,1:2);
 donor = time_raw(2:end-1,4); % donor strings
 nutrition_calcium = (time_num(:,4));
 nutrition_calorie = (time_num(:,5));
@@ -28,8 +28,20 @@ nutrition_sodium = (time_num(:,12));
 nutrition_sugar = (time_num(:,13));
 
 %% Donor A Sample ID
+sample_days = 627;
+donorA_loc = zeros(sample_days,1);
+loc = 1;
+for i=1:length(donor)
+    if(not(isempty(cell2mat(strfind(donor(i), 'DonorA')))))
+        donorA_loc(loc) = i;
+        loc = loc+1;
+    end
+end
 
-
+donorA_sampleID = {};
+for i = 1:length(donorA_loc)
+    donorA_sampleID(i,:) = sampleID(i,:);
+end
 %% Donor A Stool
 % Stool
 stool_days = 341;
@@ -113,8 +125,6 @@ for i = 1:length(donorA_stool_loc)
     donorA_stool_sugar(i,1) = collection_days(donorA_stool_loc(i));
     donorA_stool_sugar(i,2) = nutrition_sugar(donorA_stool_loc(i));
 end
-
-
 
 % Plotting
 figure()
@@ -266,6 +276,7 @@ end
 figure()
 subplot(2,5,1)
 plot(donorA_saliva_calcium(:,1),donorA_saliva_calcium(:,2))
+axis([ min(donorA_saliva_calcium(:,1)) max() min(donorA_saliva_calcium(:,2)) max(donorA_saliva_calcium(:,2))])
 title('Donor A Saliva Calcium')
 xlabel('Collection Days')
 ylabel('Calcium (s)')
@@ -323,3 +334,28 @@ plot(donorA_saliva_sugar(:,1),donorA_saliva_sugar(:,2))
 title('Donor A Saliva Sugar')
 xlabel('Collection Days')
 ylabel('Sugar (s)')
+
+
+%% Bacteria Abundance
+% Sample ID Matches
+otu_c = 1127;
+otu_r = 736;
+bacteria1 = [];
+loc = 1;
+otu_sample_loc = zeros(length(donorA_sampleID),1);
+% cell2mat(strfind(otu_raw(2,1), donorA_sampleID(2)))
+
+% find location of the sample ID in the OTU file
+for i = 2:otu_r
+    for j = 1:length(donorA_sampleID)
+       if(not(isempty(cell2mat(strfind(otu_raw(i,1), donorA_sampleID(j,1))))))
+        otu_sample_loc(loc) = i;
+        loc = loc+1;
+       end 
+    end
+end
+
+bac1_occurance = zeros(length(otu_sample_loc),1);
+for i = 1:length(otu_sample_loc)
+    bac1_occurance(i) = 0;
+end
