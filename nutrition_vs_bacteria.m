@@ -337,47 +337,129 @@ for i = 2:otu_r
 end
 
 %% Bacteria Stool
+stool_firstIndex = 2:70;
+stool_secondIndex = 118:191;
 
-for i=2:101
-    bac_stool_data = getBacteriaData(otu_raw(1,i),otu_stool_sample_loc,otu_raw,i);
-    filename = ['bacteria_data\stool\bacteria_stool_' num2str(i-1) '.mat'];
-    save(filename,'bac_stool_data');
-end
+bac_stoolinterest = [1 12 27 33 48];
+
+% for i=2:101
+%     bac_stool_data = getBacteriaData(otu_raw(1,i),otu_stool_sample_loc,otu_raw,i);
+%     filename = ['bacteria_data\stool\bacteria_stool_' num2str(i-1) '.mat'];
+%     save(filename,'bac_stool_data');
+% end
 
 % Testing with first 10 Bacteria Typse
-figure()
-for i=1:10
-    filename = ['bacteria_data\stool\bacteria_stool_' num2str(i) '.mat'];
+
+for i=1:length(bac_stoolinterest)
+    k = bac_stoolinterest(i);
+    filename = ['bacteria_data\stool\bacteria_stool_' num2str(k) '.mat'];
     bac_stool = load(filename);
     bac_stool_dat = bac_stool.bac_stool_data.Bacteria;
-    subplot(2,5,i)
-    plot(bac_stool_dat(:,2),bac_stool_dat(:,1));
-    bac_sequence = ['Bacteria Stool Sequence ' num2str(i)]
+    stool_interest_bac(i) = bac_stool_dat;
+%     figure()
+%     plot(bac_stool_dat(stool_secondIndex,2),bac_stool_dat(stool_secondIndex,1));
+    bac_sequence = ['Bacteria Stool Sequence ' num2str(k)];
     title(bac_sequence)
     xlabel('Collection Days')
     ylabel('Bacteria Amount')
 end
 
+
+
+%% Stool Correlation
+Ts = 86400; % sampling period of once a day in seconds
+Fs = 1/Ts;
+[C1,lag1] = xcorr(bac_stool_dat(stool_secondIndex,1),donorA_stool_calorie(stool_secondIndex,2));
+figure
+plot(lag1/Fs,C1,'k')
+ylabel('Amplitude')
+grid on
+title('Cross-correlation between Bacteria Sample 48 and Stool Calorie ')
+
+[P1,f1] = periodogram(donorA_stool_calorie(stool_secondIndex,2),[],[],Fs,'power');
+[P2,f2] = periodogram(bac_stool_dat(stool_secondIndex,1),[],[],Fs,'power');
+
+figure
+t = (0:numel(donorA_stool_calorie(stool_secondIndex,2))-1)/Fs;
+subplot(2,2,1)
+plot(t,donorA_stool_calorie(stool_secondIndex,2),'k')
+ylabel('s1')
+grid on
+title('Time Series')
+subplot(2,2,3)
+plot(t,bac_stool_dat(stool_secondIndex,1))
+ylabel('s2')
+grid on
+xlabel('Time (secs)')
+subplot(2,2,2)
+plot(f1,P1,'k')
+ylabel('P1')
+grid on
+axis tight
+title('Power Spectrum')
+subplot(2,2,4)
+plot(f2,P2)
+ylabel('P2')
+grid on
+axis tight
+xlabel('Frequency (Hz)')
+
+sig1 = donorA_stool_calorie(stool_secondIndex,2);
+sig2 = bac_stool_dat(stool_secondIndex,1);
+[Cxy,f] = mscohere(sig1,sig2,[],[],[],Fs);
+Pxy     = cpsd(sig1,sig2,[],[],[],Fs);
+phase   = -angle(Pxy)/pi*180;
+[pks,locs] = findpeaks(Cxy,'MinPeakHeight',0.05);
+
+figure
+subplot(2,1,1)
+plot(f,Cxy)
+title('Coherence Estimate')
+grid on
+
+figure
+subplot(2,1,1)
+plot(f,Cxy)
+title('Coherence Estimate')
+grid on
+hgca = gca;
+hgca.XTick = f(locs);
+hgca.YTick = pks;
+
+subplot(2,1,2)
+plot(f,phase)
+title('Cross-spectrum Phase (deg)')
+grid on
+
+hgca.XTick = f(locs); 
+hgca.YTick = round(phase(locs));
+xlabel('Frequency (Hz)')
 
 %% Bacteria Saliva
 
-for i=2:101
-    bac_saliva_data = getBacteriaData(otu_raw(1,i),otu_saliva_sample_loc,otu_raw,i);
-    filename = ['bacteria_data\saliva\bacteria_saliva_' num2str(i-1) '.mat'];
-    save(filename,'bac_saliva_data');
-end
+%{
+bac_saliva_sample_interest = [1 12 27 33 48];
+% for i=2:101
+%     bac_saliva_data = getBacteriaData(otu_raw(1,i),otu_saliva_sample_loc,otu_raw,i);
+%     filename = ['bacteria_data\saliva\bacteria_saliva_' num2str(i-1) '.mat'];
+%     save(filename,'bac_saliva_data');
+% end
 
 % Testing with first 10 Bacteria Typse
 figure()
-for i=1:10
+for i=1:30
     filename = ['bacteria_data\saliva\bacteria_saliva_' num2str(i) '.mat'];
     bac_saliva = load(filename);
     bac_saliva_dat = bac_saliva.bac_saliva_data.Bacteria;
-    subplot(2,5,i)
+    figure()
     plot(bac_saliva_dat(:,2),bac_saliva_dat(:,1));
-    bac_sequence = ['Bacteria Saliva Sequence ' num2str(i)]
+    bac_sequence = ['Bacteria Saliva Sequence ' num2str(i)];
     title(bac_sequence)
     xlabel('Collection Days')
     ylabel('Bacteria Amount')
 end
+
+%}
+
+%% Stool Correlation
 
