@@ -355,7 +355,7 @@ for i=1:length(bac_stoolinterest)
     filename = ['bacteria_data\stool\bacteria_stool_' num2str(k) '.mat'];
     bac_stool = load(filename);
     bac_stool_dat = bac_stool.bac_stool_data.Bacteria;
-    stool_interest_bac(i) = bac_stool_dat;
+    %stool_interest_bac(i) = bac_stool_dat;
 %     figure()
 %     plot(bac_stool_dat(stool_secondIndex,2),bac_stool_dat(stool_secondIndex,1));
     bac_sequence = ['Bacteria Stool Sequence ' num2str(k)];
@@ -369,7 +369,7 @@ end
 %% Stool Correlation
 Ts = 86400; % sampling period of once a day in seconds
 Fs = 1/Ts;
-[C1,lag1] = xcorr(bac_stool_dat(stool_secondIndex,1),donorA_stool_calorie(stool_secondIndex,2));
+[C1,lag1] = xcorr(bac_stool_dat(stool_secondIndex,1),donorA_stool_calorie(stool_secondIndex,2),'coeff');
 figure
 plot(lag1/Fs,C1,'k')
 ylabel('Amplitude')
@@ -424,7 +424,7 @@ title('Coherence Estimate')
 grid on
 hgca = gca;
 hgca.XTick = f(locs);
-hgca.YTick = pks;
+%hgca.YTick = pks;
 
 subplot(2,1,2)
 plot(f,phase)
@@ -432,7 +432,7 @@ title('Cross-spectrum Phase (deg)')
 grid on
 
 hgca.XTick = f(locs); 
-hgca.YTick = round(phase(locs));
+% hgca.YTick = round(phase(locs));
 xlabel('Frequency (Hz)')
 
 %% Bacteria Saliva
