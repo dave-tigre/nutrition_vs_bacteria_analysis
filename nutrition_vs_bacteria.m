@@ -116,14 +116,16 @@ end
 % plotting
 figure()
 subplot(2,5,1)
-plot(donorA_stool_calcium(:,1),donorA_stool_calcium(:,2))
-axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
+stool_calcium_norm = z_normalization( donorA_stool_calcium(:,2) );
+plot(donorA_stool_calcium(:,1),stool_calcium_norm)
+% axis([ 0 225 min(donorA_stool_calcium(:,2)) max(stool_calcium_norm)])
 title('Donor A Stool Calcium')
 xlabel('Collection Days')
 ylabel('Calcium (s)')
 
 subplot(2,5,2)
-plot(donorA_stool_calorie(:,1),donorA_stool_calorie(:,2))
+stool_calorie_norm = z_normalization( donorA_stool_calorie(:,2) );
+plot(donorA_stool_calorie(:,1),stool_calorie_norm)
 axis([ 0 225 min(donorA_stool_calorie(:,2)) max(donorA_stool_calorie(:,2))])
 title('Donor A Stool Calorie')
 xlabel('Collection Days')
@@ -352,7 +354,7 @@ bac_stoolinterest = [1 12 27 33 48];
 
 for i=1:length(bac_stoolinterest)
     k = bac_stoolinterest(i);
-    filename = ['bacteria_data\stool\bacteria_stool_' num2str(k) '.mat'];
+    filename = ['bacteria_data/stool/bacteria_stool_' num2str(k) '.mat'];
     bac_stool = load(filename);
     bac_stool_dat = bac_stool.bac_stool_data.Bacteria;
     %stool_interest_bac(i) = bac_stool_dat;
@@ -463,3 +465,8 @@ end
 
 %% Stool Correlation
 
+%% Spectrogram
+figure
+spectrogram(bac_stool_dat(stool_secondIndex,1),'yaxis') 
+figure
+spectrogram(donorA_stool_calorie(stool_secondIndex,2),'yaxis') 
