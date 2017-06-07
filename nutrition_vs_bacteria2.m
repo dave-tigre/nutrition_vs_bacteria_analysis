@@ -59,7 +59,7 @@ for i=1:length(donor)
 end
 %% Donor A Stool
 
-stool_Fs = 1*7; % frequency of sampling was once every 24 hours (assumption)
+stool_Fs = 1; % frequency of sampling was once every 24 hours (assumption)
 stool_firstIndex = 2:70; % data obtained in first collection half
 stool_secondIndex = 118:191; % data obtained in second collection half
 
@@ -118,140 +118,281 @@ for i = 1:length(donorA_stool_loc)
     donorA_stool_sugar(i,2) = nutrition_sugar(donorA_stool_loc(i));
 end
 
+
+%% Calcium Plot 
 t = (0:length(donorA_stool_calcium(stool_firstIndex,2)) - 1)/stool_Fs;
 % plotting
 figure()
-subplot(2,2,1)
-plot(donorA_stool_calcium(stool_firstIndex,1),donorA_stool_calcium(stool_firstIndex,2))
-axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
-title('Donor A Stool Calcium First Days')
+subplot(2,3,1)
+stool_calcium_norm_firstIndex = z_normalization( donorA_stool_calcium(stool_firstIndex,2) );
+plot(donorA_stool_calcium(stool_firstIndex,1),stool_calcium_norm_firstIndex)
+% axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
+title('Donor A Stool Calcium Days 1-70')
 xlabel('Collection Days')
 ylabel('Calcium (s)')
 
-subplot(2,2,2)
+subplot(2,3,2)
 [autocor,lags] = xcorr(donorA_stool_calcium(stool_firstIndex,2),'coeff');
 plot(lags/stool_Fs,autocor)
+title('Donor A Stool Calcium Days 1-70 Autocorrelation')
 xlabel('Lag (days)')
 ylabel('Autocorrelation')
 [pksh,lcsh] = findpeaks(autocor);
 short = mean(diff(lcsh))/stool_Fs;
+[pklg,lclg] = findpeaks(autocor, ...
+    'MinPeakDistance',ceil(short)*stool_Fs,'MinPeakheight',0.1);
+long = mean(diff(lclg))/stool_Fs;
 hold on
-pks = plot(lags(lcsh)/stool_Fs,pksh,'or');
+pks = plot(lags(lcsh)/stool_Fs,pksh,'or', ...
+    lags(lclg)/stool_Fs,pklg+0.02,'vk');
 hold off
-legend(pks,[repmat('Period: ',[1 1]) num2str([short])])
+legend(pks,[repmat('Period: ',[2 1]) num2str([short;long],3)])
 
 
 
-subplot(2,2,3)
-plot(donorA_stool_calcium(stool_secondIndex,1),donorA_stool_calcium(stool_secondIndex,2))
-axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
-title('Donor A Stool Calcium Second Half')
+[pxx,f] = periodogram(stool_calcium_norm_firstIndex,[],[],stool_Fs);
+subplot(2,3,3)
+plot(f,pxx)
+title('Donor A Stool Calcium Days 1-70 FFT')
+xlabel('Frequency (cycles/day)')
+ylabel('Magnitude')
+
+subplot(2,3,4)
+stool_calcium_norm_secondIndex = z_normalization( donorA_stool_calcium(stool_secondIndex,2) );
+plot(donorA_stool_calcium(stool_secondIndex,1),stool_calcium_norm_secondIndex)
+% axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
+title('Donor A Stool Calcium Days 123-202')
 xlabel('Collection Days')
 ylabel('Calcium (s)')
 
-subplot(2,2,4)
+subplot(2,3,5)
 [autocor,lags] = xcorr(donorA_stool_calcium(stool_secondIndex,2),'coeff');
 plot(lags/stool_Fs,autocor)
+title('Donor A Stool Calcium Days 123-202 Autocorrelation')
 xlabel('Lag (days)')
 ylabel('Autocorrelation')
 [pksh,lcsh] = findpeaks(autocor);
 short = mean(diff(lcsh))/stool_Fs;
+[pklg,lclg] = findpeaks(autocor, ...
+    'MinPeakDistance',ceil(short)*stool_Fs,'MinPeakheight',0.1);
+long = mean(diff(lclg))/stool_Fs;
 hold on
-pks = plot(lags(lcsh)/stool_Fs,pksh,'or');
+pks = plot(lags(lcsh)/stool_Fs,pksh,'or', ...
+    lags(lclg)/stool_Fs,pklg+0.02,'vk');
 hold off
-legend(pks,[repmat('Period: ',[1 1]) num2str([short])])
+legend(pks,[repmat('Period: ',[2 1]) num2str([short;long],3)])
 
-%%
-win = donorA_stool_calcium(stool_secondIndex,2);
-h = [1/2 1/2];
-binomialCoeff = conv(h,h);
-% for n = 1:1
-%     binomialCoeff = conv(binomialCoeff,h);
+[pxx,f] = periodogram(stool_calcium_norm_secondIndex,[],[],stool_Fs);
+subplot(2,3,6)
+plot(f,pxx)
+title('Donor A Stool Calcium Days 123-202 FFT')
+xlabel('Frequency (cycles/day)')
+ylabel('Magnitude')
+
+%% Calorie Plot 
+
+t = (0:length(donorA_stool_calorie(stool_firstIndex,2)) - 1)/stool_Fs;
+% plotting
+figure()
+subplot(2,3,1)
+stool_calorie_norm_firstIndex = z_normalization( donorA_stool_calorie(stool_firstIndex,2) );
+plot(donorA_stool_calorie(stool_firstIndex,1),stool_calorie_norm_firstIndex)
+% axis([ 0 225 min(donorA_stool_calorie(:,2)) max(donorA_stool_calorie(:,2))])
+title('Donor A Stool Calorie Days 1-70')
+xlabel('Collection Days')
+ylabel('Calorie (s)')
+
+subplot(2,3,2)
+[autocor,lags] = xcorr(donorA_stool_calorie(stool_firstIndex,2),'coeff');
+plot(lags/stool_Fs,autocor)
+title('Donor A Stool Calorie Days 1-70 Autocorrelation')
+xlabel('Lag (days)')
+ylabel('Autocorrelation')
+[pksh,lcsh] = findpeaks(autocor);
+short = mean(diff(lcsh))/stool_Fs;
+[pklg,lclg] = findpeaks(autocor, ...
+    'MinPeakDistance',ceil(short)*stool_Fs,'MinPeakheight',0.1);
+long = mean(diff(lclg))/stool_Fs;
+hold on
+pks = plot(lags(lcsh)/stool_Fs,pksh,'or', ...
+    lags(lclg)/stool_Fs,pklg+0.02,'vk');
+hold off
+legend(pks,[repmat('Period: ',[2 1]) num2str([short;long],3)])
+
+
+
+[pxx,f] = periodogram(stool_calorie_norm_firstIndex,[],[],stool_Fs);
+subplot(2,3,3)
+plot(f,pxx)
+title('Donor A Stool Calorie Days 1-70 FFT')
+xlabel('Frequency (cycles/day)')
+ylabel('Magnitude')
+
+subplot(2,3,4)
+stool_calorie_norm_secondIndex = z_normalization( donorA_stool_calorie(stool_secondIndex,2) );
+plot(donorA_stool_calorie(stool_secondIndex,1),stool_calorie_norm_secondIndex)
+% axis([ 0 225 min(donorA_stool_calorie(:,2)) max(donorA_stool_calorie(:,2))])
+title('Donor A Stool Calorie Days 123-202')
+xlabel('Collection Days')
+ylabel('Calorie (s)')
+
+subplot(2,3,5)
+[autocor,lags] = xcorr(donorA_stool_calorie(stool_secondIndex,2),'coeff');
+plot(lags/stool_Fs,autocor)
+title('Donor A Stool Calorie Days 123-202 Autocorrelation')
+xlabel('Lag (days)')
+ylabel('Autocorrelation')
+[pksh,lcsh] = findpeaks(autocor);
+short = mean(diff(lcsh))/stool_Fs;
+[pklg,lclg] = findpeaks(autocor, ...
+    'MinPeakDistance',ceil(short)*stool_Fs,'MinPeakheight',0.1);
+long = mean(diff(lclg))/stool_Fs;
+hold on
+pks = plot(lags(lcsh)/stool_Fs,pksh,'or', ...
+    lags(lclg)/stool_Fs,pklg+0.02,'vk');
+hold off
+legend(pks,[repmat('Period: ',[2 1]) num2str([short;long],3)])
+
+[pxx,f] = periodogram(stool_calorie_norm_secondIndex,[],[],stool_Fs);
+subplot(2,3,6)
+plot(f,pxx)
+title('Donor A Stool Calorie Days 123-202 FFT')
+xlabel('Frequency (cycles/day)')
+ylabel('Magnitude')
+
+
+%% Bacteria Abundance
+% % Sample ID Matches
+otu_c = 1127;
+otu_r = 736;
+bacteria1 = [];
+loc_stool = 1;
+loc_saliva = 1;
+
+% [Sample ID, Location in OTU, Corresponding Collection Day]
+otu_stool_sample_loc = num2cell(zeros(length(donorA_stool_sampleID),3));
+otu_saliva_sample_loc = num2cell(zeros(length(donorA_saliva_sampleID),3));
+
+% find location of the sample ID in the OTU file
+for i = 2:otu_r
+    for j = 1:length(donorA_stool_sampleID)
+       if(not(isempty(cell2mat(strfind(otu_raw(i,1), donorA_stool_sampleID(j,1))))))
+        otu_stool_sample_loc(loc_stool,1) = otu_raw(i,1);
+        otu_stool_sample_loc(loc_stool,2) = num2cell(i);
+        otu_stool_sample_loc(loc_stool,3) = donorA_stool_sampleID(j,2);
+        loc_stool = loc_stool+1; 
+       end
+    end
+    for j =1:length(donorA_saliva_sampleID)
+       if(not(isempty(cell2mat(strfind(otu_raw(i,1), donorA_saliva_sampleID(j,1))))))
+        otu_saliva_sample_loc(loc_saliva,1) = otu_raw(i,1);
+        otu_saliva_sample_loc(loc_saliva,2) = num2cell(i);
+        otu_saliva_sample_loc(loc_saliva,3) = donorA_saliva_sampleID(j,2);
+        loc_saliva = loc_saliva+1;
+       end 
+    end
+end
+
+
+%% Bacteria Stool
+stool_firstIndex = 2:70;
+stool_secondIndex = 118:191;
+
+bac_stoolinterest = [1 12 27 33 48];
+
+% for i=2:101
+%     bac_stool_data = getBacteriaData(otu_raw(1,i),otu_stool_sample_loc,otu_raw,i);
+%     filename = ['bacteria_data\stool\bacteria_stool_' num2str(i-1) '.mat'];
+%     save(filename,'bac_stool_data');
 % end
 
-figure
-days = 0:length(win)-1;
-fDelay = (length(binomialCoeff)-1)/2;
-binomialMA = filter(binomialCoeff, 1, win);
-plot(days,win, ...
-     days-fDelay,binomialMA)
+% Testing with first 10 Bacteria Typse
 
- n = length(binomialMA);
-y = fft(binomialMA);
-Y = fftshift(y);
-fshift = (-n/2:n/2-1)*(stool_Fs/n); % zero-centered frequency range
-figure
-plot(fshift,Y)
+for i=1:length(bac_stoolinterest)
+    k = bac_stoolinterest(i);
+    filename = ['bacteria_data/stool/bacteria_stool_' num2str(k) '.mat'];
+    bac_stool = load(filename);
+    bac_stool_dat = bac_stool.bac_stool_data.Bacteria;
+    %stool_interest_bac(i) = bac_stool_dat;
+%     figure()
+%     plot(bac_stool_dat(stool_secondIndex,2),bac_stool_dat(stool_secondIndex,1));
+    bac_sequence = ['Bacteria Stool Sequence ' num2str(k)];
+    title(bac_sequence)
+    xlabel('Collection Days')
+    ylabel('Bacteria Amount')
+end
+
+%% 
+
+bac_Fs = 1; % frequency of sampling was once every 24 hours (assumption)
+bac_firstIndex = 2:70; % data obtained in first collection half
+bac_secondIndex = 118:191; % data obtained in second collection half
+
+t = (0:length(bac_stool_dat(bac_firstIndex,1)) - 1)/bac_Fs;
+% plotting
+figure()
+subplot(2,3,1)
+bac_norm_firstIndex = z_normalization( bac_stool_dat(bac_firstIndex,1) );
+plot(bac_stool_dat(bac_firstIndex,2),bac_norm_firstIndex)
+% axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
+title('Bacteria 48 Days 1-70')
+xlabel('Collection Days')
+ylabel('Count')
+
+subplot(2,3,2)
+[autocor,lags] = xcorr(bac_stool_dat(bac_firstIndex,1),'coeff');
+plot(lags/bac_Fs,autocor)
+title('Bacteria 48 Days 1-70 Autocorrelation')
+xlabel('Lag (days)')
+ylabel('Autocorrelation')
+[pksh,lcsh] = findpeaks(autocor);
+short = mean(diff(lcsh))/bac_Fs;
+[pklg,lclg] = findpeaks(autocor, ...
+    'MinPeakDistance',ceil(short)*bac_Fs,'MinPeakheight',0.1);
+long = mean(diff(lclg))/bac_Fs;
+hold on
+pks = plot(lags(lcsh)/bac_Fs,pksh,'or', ...
+    lags(lclg)/bac_Fs,pklg+0.02,'vk');
+hold off
+legend(pks,[repmat('Period: ',[2 1]) num2str([short;long],3)])
 
 
-% figure
-% subplot(2,1,1)
-% plot(donorA_stool_calorie(:,1),donorA_stool_calorie(:,2))
-% axis([ 0 225 min(donorA_stool_calorie(:,2)) max(donorA_stool_calorie(:,2))])
-% title('Donor A Stool Calorie')
-% xlabel('Collection Days')
-% ylabel('Calorie (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_carb(:,1),donorA_stool_carb(:,2))
-% axis([ 0 225 min(donorA_stool_carb(:,2)) max(donorA_stool_carb(:,2))])
-% title('Donor A Stool Carb')
-% xlabel('Collection Days')
-% ylabel('Carb (s)')
-% 
-% figure
-% subplot(2,1,1)
-% plot(donorA_stool_cholesterol(:,1),donorA_stool_cholesterol(:,2))
-% axis([ 0 225 min(donorA_stool_cholesterol(:,2)) max(donorA_stool_cholesterol(:,2))])
-% title('Donor A Stool Cholesterol')
-% xlabel('Collection Days')
-% ylabel('Cholesterol (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_fat(:,1),donorA_stool_fat(:,2))
-% axis([ 0 225 min(donorA_stool_fat(:,2)) max(donorA_stool_fat(:,2))])
-% title('Donor A Stool Fat')
-% xlabel('Collection Days')
-% ylabel('Fat (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_fiber(:,1),donorA_stool_fiber(:,2))
-% axis([ 0 225 min(donorA_stool_fiber(:,2)) max(donorA_stool_fiber(:,2))])
-% title('Donor A Stool Fiber')
-% xlabel('Collection Days')
-% ylabel('Fiber (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_protein(:,1),donorA_stool_protein(:,2))
-% axis([ 0 225 min(donorA_stool_protein(:,2)) max(donorA_stool_protein(:,2))])
-% title('Donor A Stool Protein')
-% xlabel('Collection Days')
-% ylabel('Protein (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_satfat(:,1),donorA_stool_satfat(:,2))
-% axis([ 0 225 min(donorA_stool_satfat(:,2)) max(donorA_stool_satfat(:,2))])
-% title('Donor A Stool Saturated Fat')
-% xlabel('Collection Days')
-% ylabel('Satureated Fat (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_sodium(:,1),donorA_stool_sodium(:,2))
-% axis([0 225 min(donorA_stool_sodium(:,2)) max(donorA_stool_sodium(:,2))])
-% title('Donor A Stool Sodium')
-% xlabel('Collection Days')
-% ylabel('Sodium (s)')
-% 
-% figure()
-% subplot(2,1,1)
-% plot(donorA_stool_sugar(:,1),donorA_stool_sugar(:,2))
-% axis([ 0 225 min(donorA_stool_sugar(:,2)) max(donorA_stool_sugar(:,2))])
-% title('Donor A Stool Sugar')
-% xlabel('Collection Days')
-% ylabel('Sugar (s)')
+
+[pxx,f] = periodogram(bac_norm_firstIndex,[],[],bac_Fs);
+subplot(2,3,3)
+plot(f,pxx)
+title('Bacteria 48 Days 1-70 FFT')
+xlabel('Frequency (cycles/day)')
+ylabel('Magnitude')
+
+subplot(2,3,4)
+stool_calcium_norm_secondIndex = z_normalization( bac_stool_dat(bac_secondIndex,1) );
+plot(bac_stool_dat(bac_secondIndex,2),stool_calcium_norm_secondIndex)
+% axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
+title('Bacteria 48 Days 123-202')
+xlabel('Collection Days')
+ylabel('Count')
+
+subplot(2,3,5)
+[autocor,lags] = xcorr(bac_stool_dat(bac_secondIndex,1),'coeff');
+plot(lags/bac_Fs,autocor)
+title('Bacteria 48 Days 123-202 Autocorrelation')
+xlabel('Lag (days)')
+ylabel('Autocorrelation')
+[pksh,lcsh] = findpeaks(autocor);
+short = mean(diff(lcsh))/bac_Fs;
+[pklg,lclg] = findpeaks(autocor, ...
+    'MinPeakDistance',ceil(short)*bac_Fs,'MinPeakheight',0.1);
+long = mean(diff(lclg))/bac_Fs;
+hold on
+pks = plot(lags(lcsh)/bac_Fs,pksh,'or', ...
+    lags(lclg)/bac_Fs,pklg+0.02,'vk');
+hold off
+legend(pks,[repmat('Period: ',[2 1]) num2str([short;long],3)])
+
+[pxx,f] = periodogram(stool_calcium_norm_secondIndex,[],[],bac_Fs);
+subplot(2,3,6)
+plot(f,pxx)
+title('Bacteria 48 Days 123-202 FFT')
+xlabel('Frequency (cycles/day)')
+ylabel('Magnitude')
