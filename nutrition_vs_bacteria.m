@@ -116,76 +116,77 @@ end
 % plotting
 figure()
 subplot(2,5,1)
-stool_calcium_norm = z_normalization( donorA_stool_calcium(:,2) );
-plot(donorA_stool_calcium(:,1),stool_calcium_norm)
-% axis([ 0 225 min(donorA_stool_calcium(:,2)) max(stool_calcium_norm)])
-title('Donor A Stool Calcium')
+% stool_calcium_norm = z_normalization( donorA_stool_calcium(:,2) );
+plot(donorA_stool_calcium(:,1),donorA_stool_calcium(:,2))
+axis([ 0 225 min(donorA_stool_calcium(:,2)) max(donorA_stool_calcium(:,2))])
+title('Donor A Calcium')
 xlabel('Collection Days')
-ylabel('Calcium (s)')
+ylabel('Calcium Amount')
 
 subplot(2,5,2)
-stool_calorie_norm = z_normalization( donorA_stool_calorie(:,2) );
-plot(donorA_stool_calorie(:,1),stool_calorie_norm)
+% stool_calorie_norm = z_normalization( donorA_stool_calorie(:,2) );
+plot(donorA_stool_calorie(:,1),donorA_stool_calorie(:,2))
 axis([ 0 225 min(donorA_stool_calorie(:,2)) max(donorA_stool_calorie(:,2))])
-title('Donor A Stool Calorie')
+title('Donor A Calorie')
 xlabel('Collection Days')
-ylabel('Calorie (s)')
+ylabel('Calorie Amount')
 
 subplot(2,5,3)
 plot(donorA_stool_carb(:,1),donorA_stool_carb(:,2))
 axis([ 0 225 min(donorA_stool_carb(:,2)) max(donorA_stool_carb(:,2))])
-title('Donor A Stool Carb')
+title('Donor A Carb')
 xlabel('Collection Days')
-ylabel('Carb (s)')
+ylabel('Carb Amount')
 
 subplot(2,5,4)
 plot(donorA_stool_cholesterol(:,1),donorA_stool_cholesterol(:,2))
 axis([ 0 225 min(donorA_stool_cholesterol(:,2)) max(donorA_stool_cholesterol(:,2))])
-title('Donor A Stool Cholesterol')
+title('Donor A Cholesterol')
 xlabel('Collection Days')
-ylabel('Cholesterol (s)')
+ylabel('Cholesterol Amount')
 
 subplot(2,5,5)
 plot(donorA_stool_fat(:,1),donorA_stool_fat(:,2))
 axis([ 0 225 min(donorA_stool_fat(:,2)) max(donorA_stool_fat(:,2))])
-title('Donor A Stool Fat')
+title('Donor A Fat')
 xlabel('Collection Days')
-ylabel('Fat (s)')
+ylabel('Fat Amount')
 
 subplot(2,5,6)
 plot(donorA_stool_fiber(:,1),donorA_stool_fiber(:,2))
 axis([ 0 225 min(donorA_stool_fiber(:,2)) max(donorA_stool_fiber(:,2))])
-title('Donor A Stool Fiber')
+title('Donor A Fiber')
 xlabel('Collection Days')
-ylabel('Fiber (s)')
+ylabel('Fiber Amount')
 
 subplot(2,5,7)
 plot(donorA_stool_protein(:,1),donorA_stool_protein(:,2))
 axis([ 0 225 min(donorA_stool_protein(:,2)) max(donorA_stool_protein(:,2))])
-title('Donor A Stool Protein')
+title('Donor A Protein')
 xlabel('Collection Days')
-ylabel('Protein (s)')
+ylabel('Protein Amount')
 
 subplot(2,5,8)
 plot(donorA_stool_satfat(:,1),donorA_stool_satfat(:,2))
 axis([ 0 225 min(donorA_stool_satfat(:,2)) max(donorA_stool_satfat(:,2))])
-title('Donor A Stool Saturated Fat')
+title('Donor A Saturated Fat')
 xlabel('Collection Days')
-ylabel('Satureated Fat (s)')
+ylabel('Satureated Fat Amount')
 
 subplot(2,5,9)
 plot(donorA_stool_sodium(:,1),donorA_stool_sodium(:,2))
 axis([0 225 min(donorA_stool_sodium(:,2)) max(donorA_stool_sodium(:,2))])
-title('Donor A Stool Sodium')
+title('Donor A Sodium')
 xlabel('Collection Days')
-ylabel('Sodium (s)')
+ylabel('Sodium Amount')
 
 subplot(2,5,10)
 plot(donorA_stool_sugar(:,1),donorA_stool_sugar(:,2))
 axis([ 0 225 min(donorA_stool_sugar(:,2)) max(donorA_stool_sugar(:,2))])
-title('Donor A Stool Sugar')
+title('Donor A Sugar')
 xlabel('Collection Days')
-ylabel('Sugar (s)')
+ylabel('Sugar Amount')
+% tightfig;
 
 %% Donor A saliva
 
@@ -240,71 +241,71 @@ plot(donorA_saliva_calcium(:,1),donorA_saliva_calcium(:,2))
 axis([ 0 225 min(donorA_saliva_calcium(:,2)) max(donorA_saliva_calcium(:,2))])
 title('Donor A Saliva Calcium')
 xlabel('Collection Days')
-ylabel('Calcium (s)')
+ylabel('Calcium Amount')
 
 subplot(2,5,2)
 plot(donorA_saliva_calorie(:,1),donorA_saliva_calorie(:,2))
 axis([ 0 225 min(donorA_saliva_calorie(:,2)) max(donorA_saliva_calorie(:,2))])
 title('Donor A Saliva Calorie')
 xlabel('Collection Days')
-ylabel('Calorie (s)')
+ylabel('Calorie Amount')
 
 subplot(2,5,3)
 plot(donorA_saliva_carb(:,1),donorA_saliva_carb(:,2))
 axis([ 0 225 min(donorA_saliva_carb(:,2)) max(donorA_saliva_carb(:,2))])
 title('Donor A Saliva Carb')
 xlabel('Collection Days')
-ylabel('Carb (s)')
+ylabel('Carb Amount')
 
 subplot(2,5,4)
 plot(donorA_saliva_cholesterol(:,1),donorA_saliva_cholesterol(:,2))
 axis([ 0 225 min(donorA_saliva_cholesterol(:,2)) max(donorA_saliva_cholesterol(:,2))])
 title('Donor A Saliva Cholesterol')
 xlabel('Collection Days')
-ylabel('Cholesterol (s)')
+ylabel('Cholesterol Amount')
 
 subplot(2,5,5)
 plot(donorA_saliva_fat(:,1),donorA_saliva_fat(:,2))
 axis([ 0 225 min(donorA_saliva_fat(:,2)) max(donorA_saliva_fat(:,2))])
 title('Donor A Saliva Fat')
 xlabel('Collection Days')
-ylabel('Fat (s)')
+ylabel('Fat Amount')
 
 subplot(2,5,6)
 plot(donorA_saliva_fiber(:,1),donorA_saliva_fiber(:,2))
 axis([ 0 225 min(donorA_saliva_fiber(:,2)) max(donorA_saliva_fiber(:,2))])
 title('Donor A Saliva Fiber')
 xlabel('Collection Days')
-ylabel('Fiber (s)')
+ylabel('Fiber Amount')
 
 subplot(2,5,7)
 plot(donorA_saliva_protein(:,1),donorA_saliva_protein(:,2))
 axis([ 0 225 min(donorA_saliva_protein(:,2)) max(donorA_saliva_protein(:,2))])
 title('Donor A Saliva Protein')
 xlabel('Collection Days')
-ylabel('Protein (s)')
+ylabel('Protein Amount')
 
 subplot(2,5,8)
 plot(donorA_saliva_satfat(:,1),donorA_saliva_satfat(:,2))
 axis([ 0 225 min(donorA_saliva_satfat(:,2)) max(donorA_saliva_satfat(:,2))])
 title('Donor A Saliva Saturated Fat')
 xlabel('Collection Days')
-ylabel('Satureated Fat (s)')
+ylabel('Satureated Fat Amount')
 
 subplot(2,5,9)
 plot(donorA_saliva_sodium(:,1),donorA_saliva_sodium(:,2))
 axis([ 0 225 min(donorA_saliva_sodium(:,2)) max(donorA_saliva_sodium(:,2))])
 title('Donor A Saliva Sodium')
 xlabel('Collection Days')
-ylabel('Sodium (s)')
+ylabel('Sodium Amount')
 
 subplot(2,5,10)
 plot(donorA_saliva_sugar(:,1),donorA_saliva_sugar(:,2))
 axis([ 0 225 min(donorA_saliva_sugar(:,2)) max(donorA_saliva_sugar(:,2))])
 title('Donor A Saliva Sugar')
 xlabel('Collection Days')
-ylabel('Sugar (s)')
-
+ylabel('Sugar Amount')
+% tightfig;
 
 %% Bacteria Abundance
 % % Sample ID Matches
@@ -338,20 +339,24 @@ for i = 2:otu_r
     end
 end
 
+%% BAc collection
+
+for i=2:300
+    bac_stool_data = getBacteriaData(otu_raw(1,i),otu_stool_sample_loc,otu_raw,i);
+    filename = ['bacteria_data\stool\bacteria_stool_' num2str(i-1) '.mat'];
+    save(filename,'bac_stool_data');
+end
 %% Bacteria Stool
 stool_firstIndex = 2:70;
 stool_secondIndex = 118:191;
 
-bac_stoolinterest = [1 12 27 33 48];
+% bac_stoolinterest = [1 12 27 33 48];
+bac_stoolinterest = [1 20 33 48 87 107 123 138];
 
-% for i=2:101
-%     bac_stool_data = getBacteriaData(otu_raw(1,i),otu_stool_sample_loc,otu_raw,i);
-%     filename = ['bacteria_data\stool\bacteria_stool_' num2str(i-1) '.mat'];
-%     save(filename,'bac_stool_data');
-% end
+
 
 % Testing with first 10 Bacteria Typse
-
+figure()
 for i=1:length(bac_stoolinterest)
     k = bac_stoolinterest(i);
     filename = ['bacteria_data/stool/bacteria_stool_' num2str(k) '.mat'];
@@ -359,7 +364,8 @@ for i=1:length(bac_stoolinterest)
     bac_stool_dat = bac_stool.bac_stool_data.Bacteria;
     %stool_interest_bac(i) = bac_stool_dat;
 %     figure()
-%     plot(bac_stool_dat(stool_secondIndex,2),bac_stool_dat(stool_secondIndex,1));
+     subplot(2,4,i)
+    plot(bac_stool_dat(:,2),bac_stool_dat(:,1));
     bac_sequence = ['Bacteria Stool Sequence ' num2str(k)];
     title(bac_sequence)
     xlabel('Collection Days')
@@ -370,13 +376,24 @@ end
 
 %% Stool Correlation
 Ts = 86400; % sampling period of once a day in seconds
-Fs = 1/Ts;
-[C1,lag1] = xcorr(bac_stool_dat(stool_secondIndex,1),donorA_stool_calorie(stool_secondIndex,2),'coeff');
+Fs = 1;
+[C1,lag1] = xcorr(bac_stool_dat(stool_firstIndex,1),donorA_stool_calorie(stool_firstIndex,2),'coeff');
 figure
-plot(lag1/Fs,C1,'k')
-ylabel('Amplitude')
+subplot(1,2,1)
+plot(lag1/Fs,C1)
+ylabel('Correlation Coefficient')
+xlabel('Lag (days)')
 grid on
-title('Cross-correlation between Bacteria Sample 48 and Stool Calorie ')
+title('Donor A Calorie Intake vs. Bacteria 48 Abundance Days 1-70 ')
+
+[C2,lag2] = xcorr(bac_stool_dat(stool_secondIndex,1),donorA_stool_calorie(stool_secondIndex,2),'coeff');
+subplot(1,2,2)
+plot(lag2/Fs,C2)
+ylabel('Correlation Coefficient')
+xlabel('Lag (days)')
+grid on
+title('Donor A Calorie Intake vs. Bacteria 48 Abundance Days 123-202 ')
+
 
 [P1,f1] = periodogram(donorA_stool_calorie(stool_secondIndex,2),[],[],Fs,'power');
 [P2,f2] = periodogram(bac_stool_dat(stool_secondIndex,1),[],[],Fs,'power');
